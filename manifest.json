@@ -1,0 +1,11 @@
+{
+  "name": "Demo Trello Power-Up",
+  "homepage": "https://adonaugustin.github.io/trello-powerup-score/",
+  "author": "Adon Augustin",
+  "description": "A simple Power-Up hosted on GitHub Pages.",
+  "capabilities": [
+    "board-buttons",
+    "card-buttons",
+    "show-settings"
+  ]
+}
