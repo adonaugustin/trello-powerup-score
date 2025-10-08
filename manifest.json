@@ -1,11 +1,16 @@
 {
-  "name": "Demo Trello Power-Up",
-  "homepage": "https://adonaugustin.github.io/trello-powerup-score/",
-  "author": "Adon Augustin",
-  "description": "A simple Power-Up hosted on GitHub Pages.",
+  "name": "Card Scoring",
+  "details": "Add scores to your Trello cards to track points, priorities, or effort estimates.",
+  "icon": {
+    "url": "https://adonaugustin.github.io/trello-powerup-score/icon.png"
+  },
+  "author": "Your Name",
   "capabilities": [
-    "board-buttons",
+    "card-badges",
     "card-buttons",
+    "card-detail-badges",
     "show-settings"
-  ]
+  ],
+  "connectorName": "Card Scoring",
+  "tags": ["productivity", "scoring", "points"]
 }

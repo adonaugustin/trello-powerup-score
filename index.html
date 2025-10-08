@@ -1,16 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trello Power-Up Demo</title>
+  <meta charset="UTF-8">
+  <title>Card Scoring Power-Up</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #fff;
+    }
+    .score-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .score-input {
+      width: 80px;
+      padding: 8px;
+      border: 2px solid #0079bf;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    .btn {
+      background: #0079bf;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn:hover {
+      background: #026aa7;
+    }
+    .current-score {
+      font-size: 16px;
+      font-weight: 600;
+      color: #172b4d;
+    }
+    .label {
+      font-size: 12px;
+      color: #5e6c84;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .badge-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .score-badge {
+      background: #61bd4f;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-  <h2>🎉 Trello Power-Up Demo is Running</h2>
-  <p>You can now enable it in your Trello board.</p>
+  <div id="content"></div>
 
-  <!-- Trello Power-Up Client Library -->
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
-  <script src="powerup.js"></script>
+  <script>
+    const SCORE_KEY = 'card-score';
+    const ICON_URL = 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png';
+
+    // Initialize Power-Up
+    window.TrelloPowerUp.initialize({
+      'card-badges': function(t) {
+        return t.get('card', 'shared', SCORE_KEY)
+          .then(function(score) {
+            if (score) {
+              return [{
+                text: '⭐ ' + score,
+                color: 'green',
+                icon: ICON_URL
+              }];
+            }
+            return [];
+          });
+      },
+
+      'card-buttons': function(t) {
+        return [{
+          icon: ICON_URL,
+          text: 'Set Score',
+          callback: function(t) {
+            return t.popup({
+              title: 'Card Score',
+              url: './score-popup.html',
+              height: 150
+            });
+          }
+        }];
+      },
+
+      'card-detail-badges': function(t) {
+        return t.get('card', 'shared', SCORE_KEY)
+          .then(function(score) {
+            if (score) {
+              return [{
+                title: 'Score',
+                text: score,
+                color: 'green',
+                icon: ICON_URL
+              }];
+            }
+            return [];
+          });
+      },
+
+      'show-settings': function(t) {
+        return t.popup({
+          title: 'Settings',
+          url: './settings.html',
+          height: 120
+        });
+      }
+    });
+
+    // Handle popup content
+    if (window.location.pathname.includes('score-popup.html') || document.getElementById('content')) {
+      const t = window.TrelloPowerUp.iframe();
+      
+      t.get('card', 'shared', SCORE_KEY).then(function(currentScore) {
+        document.getElementById('content').innerHTML = `
+          <div class="label">Current Score</div>
+          <div class="current-score">${currentScore || 'Not set'}</div>
+          <div class="score-container">
+            <input type="number" id="scoreInput" class="score-input" placeholder="Enter score" value="${currentScore || ''}" min="0" max="100">
+            <button id="saveBtn" class="btn">Save</button>
+          </div>
+        `;
+
+        document.getElementById('saveBtn').addEventListener('click', function() {
+          const score = document.getElementById('scoreInput').value;
+          if (score !== '') {
+            t.set('card', 'shared', SCORE_KEY, score)
+              .then(function() {
+                t.closePopup();
+              });
+          }
+        });
+
+        document.getElementById('scoreInput').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            document.getElementById('saveBtn').click();
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>

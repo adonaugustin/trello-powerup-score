@@ -1,5 +1,5 @@
-var WHITE_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
-var BLACK_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
+var WHITE_ICON = 'https://adonaugustin.github.io/trello-powerup-score/icon.png';
+var BLACK_ICON = 'https://adonaugustin.github.io/trello-powerup-score/icon.png';
 
 var onBtnClick = function (t, opts) {
   console.log('Someone clicked the button');
