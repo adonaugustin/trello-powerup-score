@@ -1,4 +1,3 @@
-// Initialize Trello Power-Up client
 var t = window.TrelloPowerUp.iframe();
 
 window.TrelloPowerUp.initialize({
@@ -8,7 +7,7 @@ window.TrelloPowerUp.initialize({
       callback: function (t) {
         return t.alert({
           message: 'Hello from your Trello Power-Up!',
-          duration: 4
+          duration: 3
         });
       }
     }];
@@ -16,13 +15,10 @@ window.TrelloPowerUp.initialize({
 
   'card-buttons': function (t, options) {
     return [{
-      text: '📋 Show Card Info',
+      text: '📋 Card Info',
       callback: async function (t) {
         const card = await t.card('name', 'id');
-        t.alert({
-          message: `Card: ${card.name}\nID: ${card.id}`,
-          duration: 6
-        });
+        t.alert({ message: `Card: ${card.name}`, duration: 4 });
       }
     }];
   }
