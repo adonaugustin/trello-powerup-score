@@ -1,4 +1,3 @@
-var t = window.TrelloPowerUp.iframe();
 
 window.TrelloPowerUp.initialize({
   'board-buttons': function (t, options) {
