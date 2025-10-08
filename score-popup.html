@@ -2,89 +2,57 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-      padding: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 10px;
       margin: 0;
     }
-    .score-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    .score-input {
-      width: 80px;
-      padding: 8px;
+    input {
+      width: 60px;
+      padding: 6px;
       border: 2px solid #0079bf;
       border-radius: 3px;
       font-size: 14px;
+      margin-right: 8px;
     }
-    .btn {
+    button {
       background: #0079bf;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 3px;
       cursor: pointer;
       font-size: 14px;
     }
-    .btn:hover {
+    button:hover {
       background: #026aa7;
-    }
-    .current-score {
-      font-size: 16px;
-      font-weight: 600;
-      color: #172b4d;
-      margin: 8px 0;
-    }
-    .label {
-      font-size: 12px;
-      color: #5e6c84;
-      text-transform: uppercase;
-      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="label">Current Score</div>
-  <div class="current-score" id="currentScore">Loading...</div>
-  <div class="score-container">
-    <input type="number" id="scoreInput" class="score-input" placeholder="0-100" min="0" max="100">
-    <button id="saveBtn" class="btn">Save</button>
-  </div>
+  <input type="number" id="score" placeholder="Score" min="0" max="100">
+  <button id="save">Save</button>
 
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <script>
-    const t = window.TrelloPowerUp.iframe();
-    const SCORE_KEY = 'card-score';
+    var t = window.TrelloPowerUp.iframe();
+    var SCORE_KEY = 'card-score';
 
-    t.render(function() {
-      return t.get('card', 'shared', SCORE_KEY)
-        .then(function(score) {
-          document.getElementById('currentScore').textContent = score || 'Not set';
-          if (score) {
-            document.getElementById('scoreInput').value = score;
-          }
+    // Load current score
+    t.get('card', 'shared', SCORE_KEY).then(function(score) {
+      if (score) {
+        document.getElementById('score').value = score;
+      }
+    });
+
+    // Save button
+    document.getElementById('save').addEventListener('click', function() {
+      var score = document.getElementById('score').value;
+      return t.set('card', 'shared', SCORE_KEY, score)
+        .then(function() {
+          t.closePopup();
         });
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', function() {
-      const score = document.getElementById('scoreInput').value;
-      if (score !== '') {
-        t.set('card', 'shared', SCORE_KEY, score)
-          .then(function() {
-            t.closePopup();
-          });
-      }
-    });
-
-    document.getElementById('scoreInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        document.getElementById('saveBtn').click();
-      }
     });
   </script>
 </body>
